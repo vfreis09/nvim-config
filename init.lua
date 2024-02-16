@@ -140,12 +140,12 @@ require('lazy').setup({
     },
   },
 
-  -- Catppuccin theme colorscheme 
+  -- gruber-darker theme colorscheme 
   {
-   "catppuccin/nvim",
+   "blazkowolf/gruber-darker.nvim",
     priority = 1000,
     config = function()
-      vim.cmd.colorscheme 'catppuccin'
+      vim.cmd.colorscheme 'gruber-darker'
     end,
   },
 
@@ -168,10 +168,8 @@ require('lazy').setup({
     'lukas-reineke/indent-blankline.nvim',
     -- Enable `lukas-reineke/indent-blankline.nvim`
     -- See `:help indent_blankline.txt`
-    opts = {
-      char = '┊',
-      show_trailing_blankline_indent = false,
-    },
+    main = "ibl",
+    opts = {},
   },
 
   -- "gc" to comment visual regions/lines
@@ -290,8 +288,11 @@ vim.api.nvim_create_autocmd('BufWritePre', {
 
   pattern = {"*.js", "*.html", "*.ts", "*.css", "*.tsx", "*.jsx",},
 	group = vim.api.nvim_create_augroup('prettierd', { clear = true }),
-	callback = function()
-			vim.cmd '%!prettierd %'
+	callback = function(event)
+    local bufname = vim.api.nvim_buf_get_name(event.buf)
+    local escaped = vim.fn.shellescape(bufname)
+
+    vim.cmd("%!prettierd " .. escaped)
 		end
 })
 
